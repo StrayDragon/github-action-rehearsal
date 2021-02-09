@@ -23,8 +23,8 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  if: github.event.pull_request.merged == true
   comment_trigger_black_code:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: khan/pull-request-comment-trigger@master
