@@ -5,11 +5,11 @@ name: CI
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
-    types: [opened]
-  pull_request:
-    branches: [ main ]
+#   push:
+#     branches: [ main ]
+#     types: [opened]
+#   pull_request:
+#     branches: [ main ]
   issue_comment:
     types: [created]
     
@@ -48,10 +48,18 @@ jobs:
           reaction: rocket
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-      - if: steps.check.outputs.triggered == 'true'
+      - if: github.event.issue.pull_request && steps.check.outputs.triggered == 'true'
         uses: actions/checkout@v2
-      - if: steps.check.outputs.triggered == 'true'
+      - if: github.event.issue.pull_request && steps.check.outputs.triggered == 'true'
         uses: actions/setup-python@v2
-      - if: steps.check.outputs.triggered == 'true'
+      - if: github.event.issue.pull_request && steps.check.outputs.triggered == 'true'
         uses: psf/black@stable
-        
+      - if: github.event.issue.pull_request && steps.check.outputs.triggered == 'true'
+        run: |
+          URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
+          FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
+          if echo $FILES | grep -q ".py"; then
+            black $FILES
+          else
+            echo "no file changed, skip!!"
+          fi
