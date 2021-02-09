@@ -8,8 +8,9 @@ on:
 #   push:
 #     branches: [ main ]
 #     types: [opened]
-#   pull_request:
-#     branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    types: [opened]
   issue_comment:
     types: [created]
     
