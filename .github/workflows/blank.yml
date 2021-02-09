@@ -7,10 +7,10 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
 #   push:
 #     branches: [ main ]
+# #     types: [opened]
+#   pull_request:
+#     branches: [ main ]
 #     types: [opened]
-  pull_request:
-    branches: [ main ]
-    types: [opened]
   issue_comment:
     types: [created]
     
@@ -57,8 +57,8 @@ jobs:
       - if: github.event.issue.pull_request && steps.check.outputs.triggered == 'true'
         name: black code
         run: |
-          echo "PR number = ${{ github.event.number }}"
-          URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}/files"
+          echo "Comment on PR #${{ github.event.issue.number }}"
+          URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}/files"
           FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
           if echo $FILES | grep -q ".py"; then
             black $FILES
