@@ -53,13 +53,12 @@ jobs:
       - if: github.event.issue.pull_request && steps.check.outputs.triggered == 'true'
         uses: actions/setup-python@v2
       - if: github.event.issue.pull_request && steps.check.outputs.triggered == 'true'
-        uses: psf/black@stable
-      - if: github.event.issue.pull_request && steps.check.outputs.triggered == 'true'
         name: black code
         run: |
           echo "Comment on PR #${{ github.event.issue.number }}"
           URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}/files"
           FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
+          pip install black
           if echo $FILES | grep -q ".py"; then
             black $FILES
           else
