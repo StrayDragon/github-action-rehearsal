@@ -60,7 +60,7 @@ jobs:
           FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
           pip install black
           if echo $FILES | grep -q ".py"; then
-            black ${{ GITHUB_WORKSPACE }}/$FILES
+            black ${{ github.workspace }}/$FILES
           else
             echo "no file changed, skip!!"
           fi
