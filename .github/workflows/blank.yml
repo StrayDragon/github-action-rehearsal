@@ -54,15 +54,6 @@ jobs:
         uses: actions/setup-python@v2
       - if: github.event.issue.pull_request && steps.check.outputs.triggered == 'true'
         uses: psf/black@stable
-      - name: Update source code
-        run: eslint "src/**" --fix
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v7
-        with:
-          author_name: Your Name
-          author_email: mail@example.com
-          message: 'Your commit message'
-          add: '*.js'
       - if: github.event.issue.pull_request && steps.check.outputs.triggered == 'true'
         name: black code
         run: |
@@ -75,3 +66,11 @@ jobs:
           else
             echo "no file changed, skip!!"
           fi
+      - name: Commit changes
+        if: github.event.issue.pull_request && steps.check.outputs.triggered == 'true'
+        uses: EndBug/add-and-commit@v7
+        with:
+          author_name: Your Name
+          author_email: mail@example.com
+          message: 'Your commit message'
+          add: '*.py'
