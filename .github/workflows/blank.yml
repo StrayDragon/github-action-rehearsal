@@ -65,7 +65,7 @@ jobs:
         if: ${{ steps.comment_trigger_black_code.outputs.updated == 'yes' }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'generate by protoapic'
+          commit-message: 'generate by black'
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
