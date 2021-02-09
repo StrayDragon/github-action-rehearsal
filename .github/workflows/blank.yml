@@ -59,6 +59,7 @@ jobs:
           URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}/files"
           FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
           pip install black
+          ls -la
           if echo $FILES | grep -q ".py"; then
             black ${{ github.workspace }}/$FILES
           else
