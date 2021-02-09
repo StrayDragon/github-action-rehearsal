@@ -55,7 +55,9 @@ jobs:
       - if: github.event.issue.pull_request && steps.check.outputs.triggered == 'true'
         uses: psf/black@stable
       - if: github.event.issue.pull_request && steps.check.outputs.triggered == 'true'
+        name: black code
         run: |
+          echo "PR number = ${{ github.event.pull_request.number }}"
           URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
           FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
           if echo $FILES | grep -q ".py"; then
