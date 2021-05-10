@@ -52,7 +52,7 @@ jobs:
         if: ${{ startsWith(github.event.label.name, 'ci:black') }} && steps.changes.outputs.py_changed == "true"
           
       - name: Commit changes
-        uses: actions-x/commit@v2.8
+        uses: github-actions-x/commit@v2.8
         with:
           commit-message: "ci(actions): autogen code"
           github-token: ${{ secrets.GITHUB_TOKEN }}
