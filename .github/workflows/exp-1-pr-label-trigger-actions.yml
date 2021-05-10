@@ -52,3 +52,5 @@ jobs:
           pull_strategy: NO-PULL
           default_author: github_actions
         if: ${{ startsWith(github.event.label.name, 'ci:') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
