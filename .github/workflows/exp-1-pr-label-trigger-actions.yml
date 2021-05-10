@@ -53,4 +53,5 @@ jobs:
         uses: EndBug/add-and-commit@v7
         with:
           message: "ci(actions): autogen code"
+          pull_strategy: NO-PULL
         if: ${{ startsWith(github.event.label.name, 'ci:') }}
