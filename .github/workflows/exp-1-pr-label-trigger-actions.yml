@@ -36,10 +36,19 @@ jobs:
               - '**.py'
         if: ${{ startsWith(github.event.label.name, 'ci:') }}
         
-      - uses: psf/black@stable
+      - uses: actions/setup-python@v2
         with:
-          src: "${{ steps.filter.outputs.py_changed_files }}"
-          options: ""
+          python-version: '3.7' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+        if: steps.changes.outputs.py_changed == "true"
+        
+      - name: Prepare changed py files Deps
+        run: |
+          pip install black
+        if: steps.changes.outputs.py_changed == "true"
+          
+      - name: "With tag ci:black action"
+        run: |
+          black ${{ steps.filter.outputs.py_changed_files }}
         if: ${{ startsWith(github.event.label.name, 'ci:black') }} && steps.changes.outputs.py_changed == "true"
           
       - name: Commit changes
