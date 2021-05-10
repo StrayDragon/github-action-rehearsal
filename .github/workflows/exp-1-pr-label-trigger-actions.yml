@@ -1,11 +1,7 @@
 name: exp-1-pr-label-trigger-actions
 
 on:
-  issues:
-    types:
-      - labeled
-      - unlabeled
-  pull_request_target:
+  pull_request:
     types:
       - labeled
       - unlabeled
