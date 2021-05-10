@@ -1,0 +1,49 @@
+name: exp-1-pr-label-trigger-actions.yml
+
+on:
+  issues:
+    types:
+      - labeled
+      - unlabeled
+  pull_request_target:
+    types:
+      - labeled
+      - unlabeled
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  comment:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: main # Set your default branch
+
+      - name: Label Commenter
+        uses: peaceiris/actions-label-commenter@v1
+        
+      - name: Detect files changed
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          list-files: shell
+          filters: |
+            py_changed:
+              - '**.py'
+        if: ${{ startsWith(github.event.label.name, 'ci:') }}
+        
+      - uses: psf/black@stable
+        with:
+          args: "${{ steps.filter.outputs.py_changed_files }}"
+        if: ${{ startsWith(github.event.label.name, 'ci:') }} && steps.changes.outputs.py_changed == "true"
+          
+      - name: Commit changes
+        uses: actions-x/commit@v2
+        with:
+          email: QAQ@Orz.com
+          name: ci(actions): autogen code
+        if: ${{ startsWith(github.event.label.name, 'ci:') }}
