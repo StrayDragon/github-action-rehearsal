@@ -45,5 +45,5 @@ jobs:
         uses: actions-x/commit@v2
         with:
           email: QAQ@Orz.com
-          name: ci(actions): autogen code
+          name: "ci(actions): autogen code"
         if: ${{ startsWith(github.event.label.name, 'ci:') }}
