@@ -38,7 +38,8 @@ jobs:
         
       - uses: psf/black@stable
         with:
-          args: "${{ steps.filter.outputs.py_changed_files }}"
+          src: "${{ steps.filter.outputs.py_changed_files }}"
+          options: ""
         if: ${{ startsWith(github.event.label.name, 'ci:black') }} && steps.changes.outputs.py_changed == "true"
           
       - name: Commit changes
