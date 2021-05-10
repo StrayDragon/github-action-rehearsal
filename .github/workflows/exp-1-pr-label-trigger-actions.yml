@@ -50,4 +50,5 @@ jobs:
         with:
           message: "ci(actions): autogen code"
           pull_strategy: NO-PULL
+          default_author: github_actions
         if: ${{ startsWith(github.event.label.name, 'ci:') }}
