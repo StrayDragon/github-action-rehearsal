@@ -39,7 +39,7 @@ jobs:
       - uses: psf/black@stable
         with:
           args: "${{ steps.filter.outputs.py_changed_files }}"
-        if: ${{ startsWith(github.event.label.name, 'ci:') }} && steps.changes.outputs.py_changed == "true"
+        if: ${{ startsWith(github.event.label.name, 'ci:black') }} && steps.changes.outputs.py_changed == "true"
           
       - name: Commit changes
         uses: actions-x/commit@v2
