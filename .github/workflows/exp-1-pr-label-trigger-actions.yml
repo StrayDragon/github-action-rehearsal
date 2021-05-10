@@ -48,14 +48,12 @@ jobs:
           
       - name: "With tag ci:black action"
         run: |
-          python -m black ${{ steps.filter.outputs.py_changed_files }}
+          python -m black ${{ steps.changes.outputs.py_changed_files }}
         if: ${{ startsWith(github.event.label.name, 'ci:black') }} && steps.changes.outputs.py_changed == "true"
           
       - name: Commit changes
-        uses: actions-x/commit@v2
+        uses: actions-x/commit@v2.8
         with:
-          name: GitHub
-          email: noreply@github.com
           commit-message: "ci(actions): autogen code"
           github-token: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ startsWith(github.event.label.name, 'ci:') }}
