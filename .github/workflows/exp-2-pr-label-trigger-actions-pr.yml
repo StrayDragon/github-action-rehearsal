@@ -1,0 +1,70 @@
+name: ci auto generate
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  ci-autogen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Check PR labels action step
+        id: check_pr_labels
+        uses: shioyang/check-pr-labels-on-push-action@v1.0.3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          labels: '["ci(pr):black"]'
+          
+      - name: Detect files changed
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          list-files: shell
+          filters: |
+            py_changed:
+              - '**.py'
+        if: ${{ contains(steps.check_pr_labels.outputs.result, 'ci(pr):black') }}
+        
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+        if: steps.changes.outputs.py_changed == "true"
+        
+      - name: generate code
+        id: generate
+        run: |
+          pip install black
+          python -m black ${{ steps.changes.outputs.py_changed_files }}
+          git diff | head -10
+          echo "::set-output name=updated::no"
+          git diff --no-ext-diff --quiet --exit-code || echo "::set-output name=updated::yes"
+        if: steps.changes.outputs.py_changed == "true"
+        
+      - name: Create Pull Request
+        id: cpr
+        if: ${{ steps.generate.outputs.updated == 'yes' }}
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'ci(actions): autogen code'
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
+          branch: ci-autogen-code
+          delete-branch: true
+          title: 'Update generated code'
+          body: |
+            # 🤖 Update generated code 🤖
+            ## Python: 
+            - Formating: black code (${{ steps.changes.outputs.py_changed }})
+            ...
+            
+            ---
+            > Triggered by [${{ github.sha }}](https://github.com/StrayDragon/github-action-rehearsal/commit/${{ github.sha }})
+          labels: |
+            robot
+          reviewers: ${{ github.actor }}
+          draft: false
