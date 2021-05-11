@@ -17,9 +17,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           labels: '["ci(pr):black"]'
-      
-      - run: |
-          echo ${{ steps.check_pr_labels.outputs.result }}
           
       - name: Detect files changed
         uses: dorny/paths-filter@v2
@@ -29,7 +26,7 @@ jobs:
           filters: |
             py_changed:
               - '**.py'
-        if: ${{ contains(steps.check_pr_labels.outputs.result, 'ci(pr):black') }}
+        if: steps.check_pr_labels.outputs.result == "true"
         
       - uses: actions/setup-python@v2
         with:
