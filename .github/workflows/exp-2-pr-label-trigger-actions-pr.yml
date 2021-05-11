@@ -18,6 +18,12 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           labels: '["ci(pr):black"]'
           
+      - name: Debug
+        run: |
+          echo ${{ steps.check_pr_labels.outputs.result }}
+          echo ${{ contains(steps.check_pr_labels.outputs.result, 'ci(pr):black') }}
+          echo ${{ steps.check_pr_labels.outputs.result == 'true' }}
+          
       - name: Detect files changed
         uses: dorny/paths-filter@v2
         id: changes
@@ -26,12 +32,12 @@ jobs:
           filters: |
             py_changed:
               - '**.py'
-        if: ${{ steps.check_pr_labels.outputs.result == "true" }}
+        if: ${{ steps.check_pr_labels.outputs.result == 'true' }}
         
       - uses: actions/setup-python@v2
         with:
           python-version: '3.7'
-        if: ${{ contains(steps.check_pr_labels.outputs.result, 'ci(pr):black') }} && steps.changes.outputs.py_changed == "true"
+        if: ${{ steps.check_pr_labels.outputs.result == 'true' }} && ${{ steps.changes.outputs.py_changed == 'true' }}
         
       - name: generate code
         id: generate
@@ -41,11 +47,11 @@ jobs:
           git diff | head -10
           echo "::set-output name=updated::no"
           git diff --no-ext-diff --quiet --exit-code || echo "::set-output name=updated::yes"
-        if: ${{ contains(steps.check_pr_labels.outputs.result, 'ci(pr):black') }} && steps.changes.outputs.py_changed == "true"
+        if: ${{ steps.check_pr_labels.outputs.result == 'true' }} && ${{ steps.changes.outputs.py_changed == 'true' }}
         
       - name: Create Pull Request
         id: cpr
-        if: ${{ contains(steps.check_pr_labels.outputs.result, 'ci(pr):black') }} && ${{ steps.generate.outputs.updated == 'yes' }}
+        if: ${{ steps.check_pr_labels.outputs.result == 'true' }} && ${{ steps.changes.outputs.py_changed == 'true' }} && ${{ steps.generate.outputs.updated == 'yes' }}
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
