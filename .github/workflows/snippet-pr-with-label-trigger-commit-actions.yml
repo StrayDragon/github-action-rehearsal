@@ -1,4 +1,4 @@
-name: exp-1-pr-label-trigger-actions
+name: "Auto commit and push changes after PR labeled"
 
 on:
   pull_request:
