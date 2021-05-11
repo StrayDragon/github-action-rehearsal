@@ -1,8 +1,9 @@
-🤔 记录一些 :octocat:Github Actions 的实践
+记录一些 :octocat:Github Actions 的实践
 
 <!--
 TODO: 英文文档和链接
 --> 
+🤔
 
 ## PR
 
