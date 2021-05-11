@@ -4,22 +4,13 @@ on:
   pull_request:
     types:
       - labeled
-      - unlabeled
-
-permissions:
-  contents: read
-  issues: write
-  pull-requests: write
 
 jobs:
   comment:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-
-      - name: Label Commenter
-        uses: peaceiris/actions-label-commenter@v1
-        
+      
       - name: Detect files changed
         uses: dorny/paths-filter@v2
         id: changes
@@ -52,5 +43,3 @@ jobs:
           pull_strategy: NO-PULL
           default_author: github_actions
         if: ${{ startsWith(github.event.label.name, 'ci:') }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
