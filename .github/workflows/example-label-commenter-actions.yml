@@ -1,4 +1,4 @@
-name: Label Commenter
+name: "Example Label Commenter"
 
 on:
   issues:

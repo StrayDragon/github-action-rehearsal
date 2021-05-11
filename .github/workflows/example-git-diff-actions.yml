@@ -1,5 +1,7 @@
+name: "Example test-git-diff-action"
+
 on: push
-name: test-git-diff-action
+
 jobs:
   eslint:
     name: ESLint

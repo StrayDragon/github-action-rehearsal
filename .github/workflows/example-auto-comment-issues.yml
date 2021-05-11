@@ -1,4 +1,4 @@
-name: auto-comment-issues
+name: "Example auto-comment-issues"
 on:
   issues:
     types: [opened]

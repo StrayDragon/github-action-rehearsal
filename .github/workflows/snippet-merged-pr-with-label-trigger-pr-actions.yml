@@ -1,4 +1,4 @@
-name: ci auto generate
+name: "Auto create PR after labeled PR merged"
 
 on:
   push:

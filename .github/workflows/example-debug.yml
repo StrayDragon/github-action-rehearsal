@@ -1,4 +1,4 @@
-name: debug-ga
+name: "Example ssh your github actions runner for debugging"
 on:
   workflow_dispatch:
     inputs:
