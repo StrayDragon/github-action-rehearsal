@@ -3,7 +3,7 @@ name: ci auto generate
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   ci-autogen:
