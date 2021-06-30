@@ -1,0 +1,17 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: PlayGround
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  error-occured:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+    - uses: actions/checkout@v2
+    - name: echo something
+      run: echo hello
