@@ -18,9 +18,41 @@ jobs:
       id: set-result
       with:
         script: |
+          async function took() {
+              const resp = await github?.actions.listJobsForWorkflowRun({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id: context.runId,
+              });
+              const currentJob = resp?.data.jobs.find(job => job.name === this.jobName);
+              if (currentJob === undefined) {
+                // not found job id
+                return -1;
+              }
+
+              let time = new Date().getTime() - new Date(currentJob.started_at).getTime();
+              const h = Math.floor(time / (1000 * 60 * 60));
+              time -= h * 1000 * 60 * 60;
+              const m = Math.floor(time / (1000 * 60));
+              time -= m * 1000 * 60;
+              const s = Math.floor(time / 1000);
+
+              let value = '';
+              if (h > 0) {
+                value += `${h} hour `;
+              }
+              if (m > 0) {
+                value += `${m} min `;
+              }
+              if (s > 0) {
+                value += `${s} sec`;
+              }
+              return value;
+          }
+          const took_time = await took()
           return JSON.stringify({
             title: "",
-            text: `${process.env.AS_WORKFLOW}\n${process.env.AS_JOB} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO}@${process.env.AS_REF} by ${process.env.AS_AUTHOR} ${{ job.status }} in ${process.env.AS_TOOK}`
+            text: `in ${took_time}`
           })
         result-encoding: string
     - run: echo "${{steps.set-result.outputs.result}}"
