@@ -41,6 +41,7 @@ jobs:
       uses: mxschmitt/action-tmate@v3
       with:
         limit-access-to-actor: true
+        timeout-minutes: 15
     - name: Send result to Feishu robot
       uses: xiachufang/actions-feishu@v1.3
       with:
@@ -48,5 +49,11 @@ jobs:
         message_type: "template"
         msg_template_path: "./.github/feishu_msg_templates/simple.json"
         msg_template_values: "${{steps.set-template-values.outputs.result}}"
+    - uses: StrayDragon/actions-feishu@v0.0.1
+      with:
+        status: ${{ job.status }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
+      if: always() # Pick up events even if the job fails or is canceled.
+    - run: env
 
 
