@@ -8,7 +8,7 @@ on:
     branches: [ main ]
 
 jobs:
-  error-occured:
+  some-actions:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
@@ -18,7 +18,7 @@ jobs:
         fetch-depth: 0
     - name: Checkout this pr (2/2)
       run: |
-        git checkout master
+        git checkout main
         git checkout -
     - uses: actions/github-script@v4
       id: set-template-values
