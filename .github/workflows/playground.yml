@@ -46,7 +46,7 @@ jobs:
         msg_template_path: "./.github/feishu_msg_templates/simple2.json"
         msg_template_values: "${{steps.set-template-values.outputs.result}}"
 
-    - name: Send result to Feishu robot
+    - name: Send result to Feishu robot2
       uses: xiachufang/actions-feishu@v1.3
       with:
         webhook: ${{ secrets.FEISHU_ROBOT_WEBHOOK_URL }}
