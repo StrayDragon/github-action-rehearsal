@@ -54,9 +54,9 @@ jobs:
         msg_template_path: "./.github/feishu_msg_templates/simple2.json"
         msg_template_values: "${{steps.set-template-values.outputs.result}}"
     - name: View context attributes
-       uses: actions/github-script@v4
-       with:
-         script: console.log(context)
+      uses: actions/github-script@v4
+      with:
+        script: console.log(context)
     - name: Setup tmate session
       uses: mxschmitt/action-tmate@v3
       if: failure()
