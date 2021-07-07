@@ -42,7 +42,7 @@ jobs:
       with:
         limit-access-to-actor: true
         timeout-minutes: 15
-    - name: Send result to Feishu robot
+    - name: Send result to Feishu 
       uses: xiachufang/actions-feishu@v1.3
       with:
         webhook: ${{ secrets.FEISHU_ROBOT_WEBHOOK_URL }}
@@ -55,5 +55,4 @@ jobs:
         fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
       if: always() # Pick up events even if the job fails or is canceled.
     - run: env
-
 
