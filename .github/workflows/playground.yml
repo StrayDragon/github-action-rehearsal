@@ -10,43 +10,61 @@ on:
 jobs:
   some-actions:
     runs-on: ubuntu-latest
-    continue-on-error: true
+    strategy:
+      matrix:
+        include:
+          - target: "syncing-repo"
+            gen-cmd: "echo generating"
+            sync-cmd: |
+              cp hello.py target-protolib/
+              echo synced
+            target-repo: "StrayDragon/consumer-repo"
     steps:
-    - name: Checkout this pr (1/3)
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - name: Checkout this pr (2/2)
-      run: |
-        git checkout main
-        git checkout -
-    - uses: actions/github-script@v4
-      id: set-template-values
-      with:
-        script: |
-          const pr = "${{ github.repository }}#${{ github.event.number }}"
-          const text = `
-          **PR**: [${pr}](https://github.com/${pr})
-          **actor**: ${{ github.actor }}
-          **job status**:
-          - lint-and-check:\t${{ needs.lint-and-check.outputs.job-status }}
-          - test:\t${{ needs.test.outputs.job-status }}
-          `.trim();
-          return JSON.stringify({
-            title: "${{ github.repository }}",
-            text: text,
-          });
-        result-encoding: string
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-      with:
-        limit-access-to-actor: true
-    - name: Send result to Feishu robot
-      uses: xiachufang/actions-feishu@v1.3
-      with:
-        webhook: ${{ secrets.FEISHU_ROBOT_WEBHOOK_URL }}
-        message_type: "template"
-        msg_template_path: "./.github/feishu_msg_templates/simple.json"
-        msg_template_values: "${{steps.set-template-values.outputs.result}}"
-
+      - name: Checkout this repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2 # https://github.com/actions/checkout#checkout-head
+          path: main_repo
+      - name: Test some cmd working
+        run: |
+          rsync --help
+          rsync --version
+      - name: Check version updated
+        id: version-check
+        run: |
+          echo "::set-output name=updated::yes"
+      - name: generate code (${{ matrix.target }})
+        id: generate
+        if: ${{ steps.version-check.outputs.updated == 'yes' }}
+        run: |
+          echo "::set-output name=code_updated::yes"
+      - name: Checkout protolib(${{ matrix.target }}) repo
+        uses: actions/checkout@v2
+        if: ${{ steps.generate.outputs.code_updated == 'yes' }}
+        with:
+          repository: ${{ matrix.target-repo }}
+          # https://docs.github.com/cn/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token
+          token: ${{ secrets.PREPO_RW_GITHUB_PAT }}
+          path: target-protolib
+      - name: Sync generated code, commit changes and release
+        if: ${{ steps.version-check.outputs.updated == 'yes' && steps.generate.outputs.code_updated == 'yes' }}
+        run: |
+          # Sync changes
+          cd ${{ github.workspace }}/main_repo
+          ${{ matrix.sync-cmd }}
+          cd ${{ github.workspace }}/target-protolib
+          # Commit changes
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add . || true
+          git commit -am "sync gen code" || true
+          git push || true
+          # # Release changes
+          # has_tag=$(git tag -l --points-at HEAD)
+          # if [[ -z $has_tag ]]; then
+          #     git tag "v1.0"
+          #     git push origin "v1.0"
+          # fi
+    outputs:
+      job-status: ${{ job.status }}
 
