@@ -16,7 +16,7 @@ jobs:
           - target: "syncing-repo"
             gen-cmd: "echo generating"
             sync-cmd: |
-              cp hello.py target-protolib/
+              cp hello.py target-protolib/hello_from_main_repo.py
               echo synced
             target-repo: "StrayDragon/consumer-repo"
     steps:
