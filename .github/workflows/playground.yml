@@ -16,7 +16,8 @@ jobs:
           - target: "syncing-repo"
             gen-cmd: "echo generating"
             sync-cmd: |
-              cp hello.py ${{ github.workspace }}/target-protolib/hello_from_main_repo.py
+              printenv
+              cp hello.py $GITHUB_WORKSPACE/target-protolib/hello_from_main_repo.py
               echo synced
             target-repo: "StrayDragon/consumer-repo"
     steps:
