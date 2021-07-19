@@ -19,7 +19,7 @@ jobs:
               printenv
               cp hello.py $GITHUB_WORKSPACE/target-protolib/hello_from_main_repo.py
               echo synced
-            target-repo: "StrayDragon/consumer-repo"
+            target-repo: "TmpLair/actions-consumer"
     steps:
       - name: Checkout this repo
         uses: actions/checkout@v2
@@ -68,4 +68,3 @@ jobs:
           # fi
     outputs:
       job-status: ${{ job.status }}
-
