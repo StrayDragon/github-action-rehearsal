@@ -31,6 +31,8 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           echo "$GITHUB_CONTEXT"
+          echo ${{ github.event.pull_request.base.ref }}
+          echo ${{ github.head_ref }}
           echo ${{ github.event.pull_request.title }}
       - name: Test some cmd working
         run: |
