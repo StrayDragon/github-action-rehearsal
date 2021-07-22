@@ -30,15 +30,19 @@ jobs:
         run: |
           rsync --help
           rsync --version
+          echo ${{ github.ref }}
+          echo ${{ github.base_ref }}
       - name: Check version updated
         id: version-check
         run: |
           echo "::set-output name=updated::yes"
+          pwd
       - name: generate code (${{ matrix.target }})
         id: generate
         if: ${{ steps.version-check.outputs.updated == 'yes' }}
         run: |
           echo "::set-output name=code_updated::yes"
+          pwd
       - name: Checkout protolib(${{ matrix.target }}) repo
         uses: actions/checkout@v2
         if: ${{ steps.generate.outputs.code_updated == 'yes' }}
