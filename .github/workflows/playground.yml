@@ -26,6 +26,12 @@ jobs:
         with:
           fetch-depth: 2 # https://github.com/actions/checkout#checkout-head
           path: main_repo
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
+          echo ${{ github.event.pull_request.title }}
       - name: Test some cmd working
         run: |
           rsync --help
