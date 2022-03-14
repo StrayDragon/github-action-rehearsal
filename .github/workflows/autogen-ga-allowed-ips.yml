@@ -15,6 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        
       - name: Update Ips
         run: |
           mkdir -p $(dirname $GITHUB_ACTIONS_RUNNER_ALLOW_IPS_FILE)
@@ -23,6 +27,6 @@ jobs:
       - name: Commit changes
         uses: EndBug/add-and-commit@v7
         with:
-          message: "cd(actions): autogen github actions runner allowed ips"
+          message: "cd(actions): autogen ga runner allowed ips (${{ steps.date.outputs.date }})"
           pull_strategy: NO-PULL
           default_author: github_actions
