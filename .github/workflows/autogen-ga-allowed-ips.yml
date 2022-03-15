@@ -1,24 +1,24 @@
-name: "Auto commit and push changes for allowed github actions runner ips"
+name: "Auto commit and push changes about allowed github actions runner ips"
 
 on:
   schedule:
-    - cron: '5 4 * * *'
+    - cron: '23 3 * * sun'
   workflow_dispatch:
-  
+
 
 env:
-  GITHUB_ACTIONS_RUNNER_ALLOW_IPS_FILE: ./path/to/ips/dir/ips.txt
-  
+  GITHUB_ACTIONS_RUNNER_ALLOW_IPS_FILE: ./path/to/allowed_ip/rules.txt
+
 jobs:
-  comment:
+  update-ga-runner-allowed-ips:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-        
+
       - name: Update Ips
         run: |
           mkdir -p $(dirname $GITHUB_ACTIONS_RUNNER_ALLOW_IPS_FILE)
@@ -28,5 +28,4 @@ jobs:
         uses: EndBug/add-and-commit@v9
         with:
           message: "cd(actions): autogen ga runner allowed ips (${{ steps.date.outputs.date }})"
-          committer_name: GitHub Actions
-          committer_email: actions@github.com
+          default_author: github_actions
