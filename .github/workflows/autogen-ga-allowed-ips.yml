@@ -1,9 +1,11 @@
 name: "Auto commit and push changes about allowed github actions runner ips"
 
-on:
-  schedule:
-    - cron: '23 3 * * SUN'
-  workflow_dispatch:
+# Tested and disable schedule
+on: workflow_dispatch
+# on:
+#   schedule:
+#     - cron: '23 3 * * SUN'
+#   workflow_dispatch:
 
 
 env:
