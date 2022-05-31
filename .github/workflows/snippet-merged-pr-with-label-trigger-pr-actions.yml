@@ -1,9 +1,11 @@
 name: "Auto create PR after labeled PR merged"
 
-on:
-  push:
-    branches:
-      - main
+# Tested and disable schedule
+on: workflow_dispatch
+# on:
+#   push:
+#     branches:
+#       - main
 
 jobs:
   ci-autogen:
