@@ -22,6 +22,6 @@ jobs:
         wget -q https://github.com/xiachufang/actions-feishu/releases/download/${{ env.ACTIONS_FEISHU_TAG }}/linux-amd64-actions-feishu.tar.gz
         tar zxf linux-amd64-actions-feishu.tar.gz feishu
         ./feishu
-    - name: Print feishu output:
+    - name: Print feishu output
       run: |
         echo "make generated diff: ${{ steps.send.outputs.response }}"
