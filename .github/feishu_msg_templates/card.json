@@ -8,7 +8,7 @@
         "tag": "div",
         "text": {
           "tag": "lark_md",
-          "content": "{{ js .content }}"
+          "content": "{{ .content | printf \"%q\" }}"
         },
         "extra": {
           "tag": "button",
