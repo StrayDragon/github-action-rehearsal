@@ -7,7 +7,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "{{.message}}"
+        "content": "{{ js .message }}"
       },
       "extra": {
         "tag": "button",
