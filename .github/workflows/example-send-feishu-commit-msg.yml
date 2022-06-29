@@ -11,6 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Send feishu message
+      id: send
       env:
         ACTIONS_FEISHU_TAG: 'v1.3.1' # 替换此变量, 最新见 https://github.com/xiachufang/actions-feishu/releases
         INPUT_WEBHOOK: "${{ secrets.FEISHU_ROBOT_WEBHOOK_URL }}"
@@ -18,8 +19,9 @@ jobs:
         INPUT_MSG_TEMPLATE_PATH: '.github/feishu_msg_templates/card.json'
         INPUT_MSG_TEMPLATE_VALUES: '{"message":"fix: test message \"test\"","content":"**modified:**\\n  .github/scripts/feishu/card.js\\n\\n"}'
       run: |
-        echo $INPUT_MSG_TEMPLATE_VALUES
-        echo $INPUT_MSG_TEMPLATE_VALUES | jq
         wget -q https://github.com/xiachufang/actions-feishu/releases/download/${{ env.ACTIONS_FEISHU_TAG }}/linux-amd64-actions-feishu.tar.gz
         tar zxf linux-amd64-actions-feishu.tar.gz feishu
         ./feishu
+    - name: Print feishu output:
+      run: |
+        echo "make generated diff: ${{ steps.send.outputs.response }}"
