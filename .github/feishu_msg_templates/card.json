@@ -8,7 +8,7 @@
         "tag": "div",
         "text": {
           "tag": "lark_md",
-          "content": {{ .content }}
+          "content": {{ .content | printf "%v" }}
         },
         "extra": {
           "tag": "button",
@@ -23,7 +23,7 @@
     ],
     "header": {
       "title": {
-        "content": {{ .message }},
+        "content": {{ .message | printf "%v" }},
         "tag": "plain_text"
       }
     }
