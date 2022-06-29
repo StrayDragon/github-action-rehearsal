@@ -1,23 +1,32 @@
 {
-  "config": {
-    "wide_screen_mode": true
-  },
-  "elements": [
-    {
-      "tag": "div",
-      "text": {
-        "tag": "lark_md",
-        "content": "{{ js .message }}"
-      },
-      "extra": {
-        "tag": "button",
+  "card": {
+    "config": {
+      "wide_screen_mode": true
+    },
+    "elements": [
+      {
+        "tag": "div",
         "text": {
           "tag": "lark_md",
-          "content": "查看详情"
+          "content": "{{ js .content }}"
         },
-        "type": "primary",
-        "url": "https://feishu.cn"
+        "extra": {
+          "tag": "button",
+          "text": {
+            "tag": "lark_md",
+            "content": "查看详情"
+          },
+          "type": "primary",
+          "url": "https://feishu.cn"
+        }
+      }
+    ],
+    "header": {
+      "title": {
+        "content": "{{ js .message }}",
+        "tag": "plain_text"
       }
     }
-  ]
+  },
+  "msg_type": "interactive"
 }
